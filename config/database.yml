@@ -27,4 +27,8 @@ test:
 
 production:
   <<: *default
-  database: blackjack_production
+  host: ec2-54-83-40-119.compute-1.amazonaws.com
+  port: 5432
+  database: d92bdg025bdgdh
+  username: nymfpwyuldgdfg
+  password: OaOyG-WTWbFuMIe2ERt8t525zD
