@@ -1,0 +1,30 @@
+# PostgreSQL. Versions 9.3 and up are supported.
+#
+# Configure Using Gemfile
+# gem 'pg'
+#
+
+default: &default
+  adapter: postgresql
+  host: localhost
+  encoding: unicode
+  # For details on connection pooling, see rails configuration guide
+  # http://guides.rubyonrails.org/configuring.html#database-pooling
+  pool: 5
+  username: gadzet
+  password: gadzet
+
+development:
+  <<: *default
+  database: blackjack_development
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+test:
+  <<: *default
+  database: blackjack_test
+
+production:
+  <<: *default
+  database: blackjack_production
