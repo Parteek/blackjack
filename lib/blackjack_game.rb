@@ -100,5 +100,13 @@ module BlackjackGame
         false
       end
     end
+
+    def max_score?(drawn_cards)
+      if score(drawn_cards) == MAX_SCORE
+        true
+      else
+        false
+      end
+    end
   end
 end

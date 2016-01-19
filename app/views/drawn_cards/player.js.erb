@@ -2,3 +2,6 @@ $('.player-section').html('<%= j render(partial: "games/player", locals: {game: 
 <% if !@game.pending? %>
   $('.game-actions').html('<%= j render(partial: "games/game_actions", locals: {game: @game}) %>');
 <% end %>
+<% if @game.pending? and @game.player_score.present? %>
+  window.location.reload();
+<% end %>

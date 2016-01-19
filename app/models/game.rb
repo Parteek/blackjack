@@ -49,12 +49,17 @@ class Game < ActiveRecord::Base
       else
         self.update_attributes({player_score: score, status: 'lost'})
       end
-    end
-    if user_id.nil?
-      if Game.forced_stop?(self.card_numbers(user_id))
-        self.stop(nil)
+    elsif Game.max_score?(self.card_numbers(user_id))
+      self.stop(user_id)
+    elsif user_id.nil? and Game.forced_stop?(self.card_numbers(user_id))
+      self.stop(user_id)
+    elsif user_id.nil? and Game.can_stop?(self.card_numbers(user_id))
+      user_game_status, blackjack = self.decision_maker(self.card_numbers(user_id), self.card_numbers(self.user_id))
+      if user_game_status == "lost"
+        self.stop(user_id)
       end
     end
+
   end
 
   # this method stops the player or dealer if dealer stops then we get the result of the match and based on the result allocate money
