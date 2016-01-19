@@ -21,6 +21,7 @@ class Game < ActiveRecord::Base
         self.drawn_cards.create({user_id: nil, card_number: card_number})
       end
     end
+    self.check_for_stop self.user_id
   end
 
   #it draws one card and calls check for stop
