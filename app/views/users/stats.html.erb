@@ -1,0 +1,26 @@
+<div class="col-xs-12 col-xs-offset-0 col-sm-10 col-sm-offset-1">
+  <%= link_to 'Start New Game', new_game_path, class: 'btn btn-primary pull-right' %>
+  <h1 class="text-center"> Statistics </h1>
+  <table class="table">
+    <thead> <tr> <th class="text-center">GAME #</th> <th class="text-center">PLAYER</th> <th class="text-center">DEALER</th> <th class="text-center">MONEY</th> </tr> </thead>
+    <tbody>
+    <% total = @games.length %>
+    <% @games.each_with_index do |game, index| %>
+      <tr class="<%= (game.won?) ? 'success' : ((game.drew?)? 'warning' : 'danger') %>">
+        <td class="text-center">
+          GAME <%= total - index %>
+        </td>
+        <td class="text-center">
+          <%= game.player_score %>
+        </td>
+        <td class="text-center">
+          <%= game.dealer_score %>
+        </td>
+        <td class="text-center">
+          <%= (game.win_amount.to_i > 0) ? "+#{game.win_amount.to_i}" : "-#{game.bet_amount.to_i}"%>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>

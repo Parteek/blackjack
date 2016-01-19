@@ -7,7 +7,9 @@ class User < ActiveRecord::Base
 
   #pending
   def money_left
-    0
+    won_amount = self.games.won.sum(:win_amount)
+    lost_amount = self.games.lost.sum(:bet_amount)
+    won_amount - lost_amount
   end
 
 end

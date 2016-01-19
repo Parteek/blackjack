@@ -27,6 +27,6 @@ class ApplicationController < ActionController::Base
   end
 
   def error status
-    render "#{status}"
+    redirect_to "/#{status}.html"
   end
 end

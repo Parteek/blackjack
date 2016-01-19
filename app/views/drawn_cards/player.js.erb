@@ -1,0 +1,4 @@
+$('.player-section').html('<%= j render(partial: "games/player", locals: {game: @game}) %>');
+<% if !@game.pending? %>
+  $('.game-actions').html('<%= j render(partial: "games/game_actions", locals: {game: @game}) %>');
+<% end %>

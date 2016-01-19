@@ -11,18 +11,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160118163714) do
+ActiveRecord::Schema.define(version: 20160119081616) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "drawn_cards", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "game_id"
+    t.integer  "card_number"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "drawn_cards", ["game_id"], name: "index_drawn_cards_on_game_id", using: :btree
+  add_index "drawn_cards", ["user_id"], name: "index_drawn_cards_on_user_id", using: :btree
+
   create_table "games", force: :cascade do |t|
     t.integer  "bet_amount"
     t.integer  "win_amount"
-    t.string   "status",     default: "pending"
+    t.string   "status",       default: "pending"
+    t.integer  "player_score"
+    t.integer  "dealer_score"
     t.integer  "user_id"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
   end
 
   add_index "games", ["user_id"], name: "index_games_on_user_id", using: :btree
@@ -35,5 +48,7 @@ ActiveRecord::Schema.define(version: 20160118163714) do
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
 
+  add_foreign_key "drawn_cards", "games"
+  add_foreign_key "drawn_cards", "users"
   add_foreign_key "games", "users"
 end

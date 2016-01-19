@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
-  before_action :auth_redirect!
+  before_action :auth_redirect!, only: [:index]
 
   def index
 

@@ -1,0 +1,21 @@
+<div class="player-cards clearfix">
+  <%game.drawn_cards.each do |card| %>
+    <% if card.user_id.present? %>
+      <span class="label label-info" style="margin: 10px;    display: inline-block;">
+        <%= card.card_name %>
+      </span>
+    <% end %>
+  <%end%>
+</div>
+<br/><br/>
+<div class="player-actions clearfix">
+  <% if game.player_score.nil? %>
+    <%= link_to 'Hit', game_drawn_cards_path(game), class: 'btn btn-success', 'data-method': 'post', :remote => true %>
+    <%= link_to 'Stop', player_stop_game_path(game), class: 'btn btn-danger', 'data-method': 'post'%>
+  <% else %>
+    <div class="label-warning label" style="display: inline-block;">
+      <%= @game.player_score %>
+    </div>
+  <% end %>
+</div>
+
