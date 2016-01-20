@@ -8,6 +8,7 @@ class GamesController < ApplicationController
 
   def show
     @game = Game.includes(:drawn_cards).where(id: params[:id]).first
+    game_owner_only!
   end
 
   def create
@@ -20,11 +21,13 @@ class GamesController < ApplicationController
   end
 
   def player_stop
+    game_owner_only!
     @game.stop(current_user.id)
     redirect_to @game
   end
 
   def dealer_stop
+    game_owner_only!
     if @game.dealer_stop?
       @game.stop(nil)
       redirect_to @game
@@ -42,5 +45,11 @@ class GamesController < ApplicationController
 
   def set_game
     @game = Game.find(params[:id])
+  end
+
+  def game_owner_only!
+    if @game.user_id != current_user.id
+      raise Exceptions::UnauthorizedAccess, 'Unauthorized'
+    end
   end
 end

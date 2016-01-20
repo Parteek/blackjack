@@ -1,4 +1,9 @@
 <%= form_for User.new, :html => { :class => 'form-horizontal' } do |f| %>
+  <% if flash[:alert] %>
+    <ul class="alert-danger">
+      <li><%= flash[:alert] %></li>
+    </ul>
+  <% end %>
   <div class="form-group">
     <%= f.text_field :email, :class => 'text_field form-control', type: 'email', placeholder: 'name@example.com' %>
   </div>

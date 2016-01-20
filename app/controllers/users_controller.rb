@@ -3,8 +3,12 @@ class UsersController < ApplicationController
 
   def create
     @user = User.find_or_create_by(email: user_params[:email])
-    session[:email] = @user.email
-    redirect_to find_game_path
+    if(@user.errors.blank?)
+      session[:email] = @user.email
+      redirect_to find_game_path
+    else
+      redirect_to root_path, alert: 'Enter correct email'
+    end
   end
 
   def stats

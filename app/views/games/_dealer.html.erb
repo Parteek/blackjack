@@ -1,5 +1,5 @@
 <div class="dealer-cards">
-  <%game.drawn_cards.each_with_index do |card, index| %>
+  <%game.drawn_cards.order('id ASC').each_with_index do |card, index| %>
     <% if card.user_id.nil? %>
       <span class="label label-info" style="margin: 10px;display: inline-block;">
         <% if game.player_score.nil? and index == 3 %>

@@ -2,7 +2,7 @@ class Game < ActiveRecord::Base
   include BlackjackGame
 
   validates_presence_of :bet_amount, :user_id
-  validates_numericality_of :bet_amount
+  validates :bet_amount, numericality: { only_integer: true, greater_than: 0}
 
   belongs_to :user
   has_many :drawn_cards
