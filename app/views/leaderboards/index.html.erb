@@ -1,0 +1,26 @@
+<%= paginate @users %>
+<div class="col-xs-12 col-xs-offset-0 col-sm-10 col-sm-offset-1">
+  <%= link_to 'Statistics', stats_user_path(current_user), class: 'btn btn-warning pull-right' %>
+  <%= link_to 'Start New Game', new_game_path, class: 'btn btn-primary pull-right' %>
+  <h1 class="text-center"> Leaderboard </h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th class="text-center">User Email</th>
+        <th class="text-center">NO OF WINS</th>
+      </tr>
+    </thead>
+    <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td class="text-center">
+          <%= link_to user.email, stats_user_path(user) %>
+        </td>
+        <td class="text-center">
+          <%= user['won_games'] %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>

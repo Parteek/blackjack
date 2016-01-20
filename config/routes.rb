@@ -13,4 +13,5 @@ Rails.application.routes.draw do
     end
     resources :drawn_cards, only: [:create]
   end
+  get 'leaderboards', to: 'leaderboards#index'
 end
