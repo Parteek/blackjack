@@ -12,9 +12,7 @@ module BlackjackGame
 
     # this method works if no one is busted
     # it takes the dealer cards and player cards and applies the rules and declares the winner
-    def decision_maker(dealer_cards, player_cards)
-      dealer_score = self.class.score(dealer_cards)
-      player_score = self.class.score(player_cards)
+    def decision_maker(player_score, dealer_score, player_cards_count, dealer_cards_count)
       game_status = ''
       blackjack = false
       if player_score > dealer_score
@@ -22,8 +20,8 @@ module BlackjackGame
       elsif dealer_score > player_score
         game_status = 'lost'
       else
-        player_blackjack = self.class.blackjack?(player_cards)
-        dealer_blackjack = self.class.blackjack?(dealer_cards)
+        player_blackjack = self.class.blackjack?(player_score, player_cards_count)
+        dealer_blackjack = self.class.blackjack?(dealer_score, dealer_cards_count)
         if dealer_blackjack and player_blackjack
           game_status = 'drew'
         elsif player_blackjack
@@ -94,8 +92,8 @@ module BlackjackGame
     end
 
     # it checks for the blackjack given drawn cards
-    def blackjack?(drawn_cards)
-      if max_score?(drawn_cards) and drawn_cards.length == 2
+    def blackjack?(score, card_count)
+      if max_score?(score) and card_count == 2
         true
       else
         false
@@ -112,8 +110,8 @@ module BlackjackGame
     end
 
     # it checks the score is the max score for given drawn cards
-    def max_score?(drawn_cards)
-      if score(drawn_cards) == MAX_SCORE
+    def max_score?(score)
+      if score == MAX_SCORE
         true
       else
         false

@@ -41,21 +41,30 @@ class Game < ActiveRecord::Base
     Game.score(self.card_numbers user_id)
   end
 
+  #it calculates scores of both dealer and player
+  def scores
+    return Game.score(self.card_numbers self.user_id), Game.score(self.card_numbers nil)
+  end
+
   # this method checks for bust and forced stop for dealer
   def check_for_stop user_id
-    score = self.calculate_score(user_id)
+    p_score, d_score = self.scores
+    score = p_score
+    if user_id.nil?
+      score = d_score
+    end
     if Game.bust?(score)
       if user_id.nil?
-        self.update_attributes({dealer_score: score, status: 'won', win_amount: (self.bet_amount*2)})
+        self.update_attributes({dealer_score: d_score, status: 'won', win_amount: (self.bet_amount*2)})
       else
-        self.update_attributes({player_score: score, status: 'lost'})
+        self.update_attributes({player_score: p_score, status: 'lost'})
       end
-    elsif Game.max_score?(self.card_numbers(user_id))
+    elsif Game.max_score?(score)
       self.stop(user_id)
     elsif user_id.nil? and Game.forced_stop?(self.card_numbers(user_id))
       self.stop(user_id)
     elsif user_id.nil? and Game.can_stop?(self.card_numbers(user_id))
-      user_game_status, blackjack = self.decision_maker(self.card_numbers(user_id), self.card_numbers(self.user_id))
+      user_game_status, blackjack = self.decision_maker(p_score, d_score, self.card_numbers(self.user_id).length, self.card_numbers(nil).length)
       if user_game_status == "lost"
         self.stop(user_id)
       end
@@ -65,11 +74,12 @@ class Game < ActiveRecord::Base
 
   # this method stops the player or dealer if dealer stops then we get the result of the match and based on the result allocate money
   def stop(user_id)
+    p_score, d_score = self.scores
     if user_id.present?
-      self.update_attributes(player_score: calculate_score(user_id))
-      check_for_stop nil
+      self.update_attributes(player_score: p_score)
+      check_for_stop nil #checks for the automatic stop of dealer.
     else
-      user_game_status, blackjack = self.decision_maker(self.card_numbers(nil), self.card_numbers(self.user_id))
+      user_game_status, blackjack = self.decision_maker(p_score, d_score, self.card_numbers(self.user_id).length, self.card_numbers(nil).length)
       win_amount = nil
       if user_game_status == 'won' and blackjack
         win_amount = 2.5*bet_amount
@@ -82,6 +92,11 @@ class Game < ActiveRecord::Base
 
   #checks if dealer can stop
   def dealer_stop?
-    Game.can_stop?(self.card_numbers nil)
+    p_score, d_score = self.scores
+    if Game.can_stop?(self.card_numbers nil) and d_score >= p_score
+      true
+    else
+      false
+    end
   end
 end
